@@ -1,8 +1,9 @@
+package LeetCode;
+
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
-public class leetCodeQuestionsArray {
+public class ArrayEasyExampleQuestions {
     public static void main(String[] args) {
         int[] num = new int[]{1,2,3,4,1,2,3};
         int[] num2 = new int[]{1,2,2,3};
@@ -106,7 +107,7 @@ public class leetCodeQuestionsArray {
                 n = entry.getKey();
             }
         }
-       // return n;
+        // return n;
 
         // second method
         int result = 0;
@@ -127,12 +128,12 @@ public class leetCodeQuestionsArray {
         for (int i = 0; i < biggerArray.length; i++) {
             for (int j = 0; j < arrayList.size(); j++){
                 int n = arrayList.get(j);
-               if(biggerArray[i] == n){
-                   result.add(n);
-                   arrayList.remove(j);
-                   break;
-               }
-           }
+                if(biggerArray[i] == n){
+                    result.add(n);
+                    arrayList.remove(j);
+                    break;
+                }
+            }
         }
         //return result.stream().mapToInt(Integer::intValue).toArray();
 
