@@ -2,10 +2,12 @@ package LeetCode;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 public class ArrayEasyExampleQuestions {
     public static void main(String[] args) {
-        int[] num = new int[]{1,2,3,4,1,2,3};
+        int[] num = new int[]{3,2,4};
         int[] num2 = new int[]{1,2,2,3};
 
         // remove duplicate
@@ -23,8 +25,17 @@ public class ArrayEasyExampleQuestions {
         //single number
         //System.out.println(singleNumber(num));
 
-        //Intersection of two arrays
-        Arrays.stream(intersect(num,num2)).forEach(System.out::println);
+        //Intersection of two array
+        //Arrays.stream(intersect(num,num2)).forEach(System.out::println);
+
+        // Plus One
+        //Arrays.stream(plusOne(num)).forEach(System.out::println);
+
+        // Move Zeros
+        //moveZeroes(num);
+
+        // Two Sum
+        Arrays.stream(twoSum(num, 6)).forEach(System.out::println);
     }
 
     public static int removeDuplicates(int[] nums) {
@@ -86,7 +97,7 @@ public class ArrayEasyExampleQuestions {
 
     public static boolean containsDuplicate(int[] nums) {
         // one way
-        int[] num = Arrays.stream(nums).distinct().toArray();
+        //int[] num = Arrays.stream(nums).distinct().toArray();
         //return num.length != nums.length;
 
         // second way
@@ -99,8 +110,8 @@ public class ArrayEasyExampleQuestions {
         // first method
         int n = 0;
         HashMap<Integer, Integer> hashMap = new HashMap<>();
-        for (int i = 0; i < nums.length; i++) {
-            hashMap.compute(nums[i], (key, value) -> (value == null) ? 1 : value + 1);
+        for (int j : nums) {
+            hashMap.compute(j, (key, value) -> (value == null) ? 1 : value + 1);
         }
         for (Map.Entry<Integer, Integer> entry : hashMap.entrySet()){
             if(entry.getValue() == 1){
@@ -125,10 +136,10 @@ public class ArrayEasyExampleQuestions {
                 .boxed()
                 .collect(Collectors.toCollection(ArrayList::new));
         ArrayList<Integer> result = new ArrayList<>();
-        for (int i = 0; i < biggerArray.length; i++) {
-            for (int j = 0; j < arrayList.size(); j++){
+        for (int k : biggerArray) {
+            for (int j = 0; j < arrayList.size(); j++) {
                 int n = arrayList.get(j);
-                if(biggerArray[i] == n){
+                if (k == n) {
                     result.add(n);
                     arrayList.remove(j);
                     break;
@@ -150,5 +161,65 @@ public class ArrayEasyExampleQuestions {
             }
         }
         return intersection.stream().mapToInt(Integer::intValue).toArray();
+    }
+
+    public static int[] plusOne(int[] digits) {
+        int n = digits.length;
+        for (int i = n - 1; i >= 0; i--) {
+            digits[i]++;
+            if (digits[i] < 10) {
+                return digits;
+            }
+            digits[i] = 0;
+        }
+        int[] result = new int[n + 1];
+        result[0] = 1;
+        return result;
+    }
+
+    public static void moveZeroes(int[] nums) {
+        // brute force approach
+        for (int i = 0; i < nums.length; i++) {
+            if(nums[i] == 0 && i < nums.length -1){
+                for (int j = i+1; j < nums.length ; j++) {
+                    if(nums[j] > 0){
+                        int temp = nums[j];
+                        nums[j] = nums[i];
+                        nums[i] = temp;
+                        break;
+                    }
+                }
+            }
+        }
+        // Optimized solution
+        int left = -1;
+        for (int i = 0; i < nums.length; i++) {
+            if(nums[i] == 0){
+                left = i;
+                break;
+            }
+        }
+    if(left != -1 && left < nums.length-1) {
+        for (int i = left + 1; i < nums.length; i++) {
+            if (nums[i] != 0) {
+                int temp = nums[i];
+                nums[i] = nums[left];
+                nums[left] = temp;
+                left++;
+            }
+        }
+    }
+        Arrays.stream(nums).forEach(System.out::println);
+    }
+
+    public static int[] twoSum(int[] nums, int target) {
+        HashMap<Integer,Integer> hashMap = new HashMap<>();
+        for (int i = 0; i < nums.length; i++) {
+            int targetLeft = target - nums[i];
+            if(hashMap.containsKey(targetLeft))
+                return new int[]{hashMap.get(targetLeft),i};
+            hashMap.put(nums[i],i);
+        }
+        throw new IllegalArgumentException("No two sum solution");
     }
 }
