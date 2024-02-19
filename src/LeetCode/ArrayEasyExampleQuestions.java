@@ -9,6 +9,17 @@ public class ArrayEasyExampleQuestions {
     public static void main(String[] args) {
         int[] num = new int[]{3,2,4};
         int[] num2 = new int[]{1,2,2,3};
+        char[][] board = {
+                {'.','.','.','.','.','.','.','.','.'},
+                {'.','.','.','.','.','.','.','.','.'},
+                {'.','9','.','.','.','.','.','.','1'},
+                {'8','.','.','.','.','.','.','.','.'},
+                {'.','9','9','3','5','7','.','.','.'},
+                {'.','.','.','.','.','.','.','4','.'},
+                {'.','.','.','8','.','.','.','.','.'},
+                {'.','1','.','.','.','.','4','.','9'},
+                {'.','.','.','5','.','4','.','.','.'}
+        };
 
         // remove duplicate
         //System.out.println(removeDuplicates(num));
@@ -35,7 +46,10 @@ public class ArrayEasyExampleQuestions {
         //moveZeroes(num);
 
         // Two Sum
-        Arrays.stream(twoSum(num, 6)).forEach(System.out::println);
+        //Arrays.stream(twoSum(num, 6)).forEach(System.out::println);
+
+        // Valid Sudoku
+        System.out.println(isValidSudoku(board));
     }
 
     public static int removeDuplicates(int[] nums) {
@@ -221,5 +235,56 @@ public class ArrayEasyExampleQuestions {
             hashMap.put(nums[i],i);
         }
         throw new IllegalArgumentException("No two sum solution");
+    }
+
+    public static boolean isValidSudoku(char[][] board) {
+        boolean result = true;
+        for (int i = 0; i < board.length; i++) {
+            for (int k = 0; k < board.length; k++) {
+                if(board[k][i] != '.' && i!= k && board[i][i] == board[k][i]){
+                    return false;
+                }
+            }
+        }
+
+        for (int i = 0; i < board.length; i+=3) {
+             char[][] res = processRowsAndColumns(board,i,i+2,i,i+2);
+             char[] r = flattenArray(res);
+            for (int j = 0; j < r.length; j++) {
+
+            }
+
+        }
+
+        return result;
+    }
+
+    public static char[][] processRowsAndColumns(char[][] arr, int startRow, int endRow, int startCol, int endCol) {
+        int rows = endRow - startRow + 1;
+        int cols = endCol - startCol + 1;
+        char[][] result = new char[rows][cols];
+
+        for (int i = startRow; i <= endRow; i++) {
+            for (int j = startCol; j <= endCol; j++) {
+                result[i - startRow][j - startCol] = arr[i][j];
+            }
+        }
+
+        return result;
+    }
+
+    public static char[] flattenArray(char[][] arr) {
+        int rows = arr.length;
+        int cols = arr[0].length;
+        char[] flatArray = new char[rows * cols];
+
+        int index = 0;
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                flatArray[index++] = arr[i][j];
+            }
+        }
+
+        return flatArray;
     }
 }
