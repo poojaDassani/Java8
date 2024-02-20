@@ -2,8 +2,6 @@ package LeetCode;
 
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 public class ArrayEasyExampleQuestions {
     public static void main(String[] args) {
@@ -19,6 +17,12 @@ public class ArrayEasyExampleQuestions {
                 {'.','.','.','8','.','.','.','.','.'},
                 {'.','1','.','.','.','.','4','.','9'},
                 {'.','.','.','5','.','4','.','.','.'}
+        };
+
+        int[][] matrix = {
+                {1, 2, 3},
+                {4, 5, 6},
+                {7, 8, 9}
         };
 
         // remove duplicate
@@ -49,7 +53,10 @@ public class ArrayEasyExampleQuestions {
         //Arrays.stream(twoSum(num, 6)).forEach(System.out::println);
 
         // Valid Sudoku
-        System.out.println(isValidSudoku(board));
+        //System.out.println(isValidSudoku(board));
+
+        //Rotate Image
+        rotate(matrix);
     }
 
     public static int removeDuplicates(int[] nums) {
@@ -238,53 +245,141 @@ public class ArrayEasyExampleQuestions {
     }
 
     public static boolean isValidSudoku(char[][] board) {
-        boolean result = true;
-        for (int i = 0; i < board.length; i++) {
-            for (int k = 0; k < board.length; k++) {
-                if(board[k][i] != '.' && i!= k && board[i][i] == board[k][i]){
+        // Validate rows
+        for (int i = 0; i < 9; i++) {
+            if (!isValidRow(board, i)) {
+                return false;
+            }
+        }
+
+        // Validate columns
+        for (int j = 0; j < 9; j++) {
+            if (!isValidColumn(board, j)) {
+                return false;
+            }
+        }
+
+        // Validate 3x3 sub-boxes
+        for (int i = 0; i < 9; i += 3) {
+            for (int j = 0; j < 9; j += 3) {
+                if (!isValidSubBox(board, i, j)) {
                     return false;
                 }
             }
         }
 
-        for (int i = 0; i < board.length; i+=3) {
-             char[][] res = processRowsAndColumns(board,i,i+2,i,i+2);
-             char[] r = flattenArray(res);
-            for (int j = 0; j < r.length; j++) {
-
-            }
-
-        }
-
-        return result;
+        return true;
     }
 
-    public static char[][] processRowsAndColumns(char[][] arr, int startRow, int endRow, int startCol, int endCol) {
-        int rows = endRow - startRow + 1;
-        int cols = endCol - startCol + 1;
-        char[][] result = new char[rows][cols];
-
-        for (int i = startRow; i <= endRow; i++) {
-            for (int j = startCol; j <= endCol; j++) {
-                result[i - startRow][j - startCol] = arr[i][j];
+    private static boolean isValidRow(char[][] board, int row) {
+        boolean[] seen = new boolean[9];
+        for (int j = 0; j < 9; j++) {
+            char digit = board[row][j];
+            if (digit != '.' && seen[digit - '1']) {
+                return false;
+            }
+            if (digit != '.') {
+                seen[digit - '1'] = true;
             }
         }
-
-        return result;
+        return true;
     }
 
-    public static char[] flattenArray(char[][] arr) {
-        int rows = arr.length;
-        int cols = arr[0].length;
-        char[] flatArray = new char[rows * cols];
-
-        int index = 0;
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < cols; j++) {
-                flatArray[index++] = arr[i][j];
+    private static boolean isValidColumn(char[][] board, int col) {
+        boolean[] seen = new boolean[9];
+        for (int i = 0; i < 9; i++) {
+            char digit = board[i][col];
+            if (digit != '.' && seen[digit - '1']) {
+                return false;
+            }
+            if (digit != '.') {
+                seen[digit - '1'] = true;
             }
         }
-
-        return flatArray;
+        return true;
     }
+
+    private static boolean isValidSubBox(char[][] board, int startRow, int startCol) {
+        boolean[] seen = new boolean[9];
+        for (int i = startRow; i < startRow + 3; i++) {
+            for (int j = startCol; j < startCol + 3; j++) {
+                char digit = board[i][j];
+                if (digit != '.' && seen[digit - '1']) {
+                    return false;
+                }
+                if (digit != '.') {
+                    seen[digit - '1'] = true;
+                }
+            }
+        }
+        return true;
+    }
+
+    // another method
+//    public static boolean isValidSudoku(char[][] board) {
+//        Set<Character>[] rows = new HashSet[9];
+//        Set<Character>[] cols = new HashSet[9];
+//        Set<Character>[] boxes = new HashSet[9];
+//
+//        for (int i = 0; i < 9; i++) {
+//            rows[i] = new HashSet<>();
+//            cols[i] = new HashSet<>();
+//            boxes[i] = new HashSet<>();
+//        }
+//
+//        for (int i = 0; i < 9; i++) {
+//            for (int j = 0; j < 9; j++) {
+//                char digit = board[i][j];
+//                if (digit != '.') {
+//                    if (!rows[i].add(digit) || !cols[j].add(digit) || !boxes[(i / 3) * 3 + j / 3].add(digit)) {
+//                        return false;
+//                    }
+//                }
+//            }
+//        }
+//
+//        return true;
+//    }
+
+//    public static void rotate(int[][] matrix) {
+//        int[][] reversed = new int[matrix.length][matrix.length];
+//        for (int col = 0; col < matrix.length; col++) {
+//            int index = matrix.length -1;
+//            for (int i = 0; i < matrix.length; i++) {
+//                reversed[col][i] = matrix[index][col];
+//                index--;
+//            }
+//        }
+//
+//        for (int i = 0; i < matrix.length; i++) {
+//            System.arraycopy(reversed[i], 0, matrix[i], 0, matrix.length);
+//
+//        }
+//        System.out.println(Arrays.deepToString(matrix));
+//
+//    }
+
+    // another optimized method to rotate
+    public static void rotate(int[][] matrix) {
+        int n = matrix.length;
+
+        // Transpose the matrix
+        for (int i = 0; i < n; i++) {
+            for (int j = i; j < n; j++) {
+                int temp = matrix[i][j];
+                matrix[i][j] = matrix[j][i];
+                matrix[j][i] = temp;
+            }
+        }
+        System.out.println(Arrays.deepToString(matrix));
+        // Reverse each row
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n / 2; j++) {
+                int temp = matrix[i][j];
+                matrix[i][j] = matrix[i][n - 1 - j];
+                matrix[i][n - 1 - j] = temp;
+            }
+        }
+    }
+
 }
