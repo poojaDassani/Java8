@@ -2,15 +2,17 @@ package LeetCode;
 
 import LeetCode.Models.ListNode;
 
+import java.util.List;
+
 public class LinkedListEasyExampleQuestions {
     public static void main(String[] args) {
-        ListNode head = new ListNode(1);
-        head.next = new ListNode(2);
-        head.next.next = new ListNode(3);
-        head.next.next.next = new ListNode(4);
-        head.next.next.next.next = new ListNode(5);
+        ListNode head = new ListNode(0);
+        head.next = new ListNode(0);
+        head.next.next = new ListNode(1);
+        head.next.next.next = new ListNode(1);
+        head.next.next.next.next = new ListNode(1);
 
-        ListNode nodeToDelete = head.next.next;
+//        ListNode nodeToDelete = head.next.next;
 
         //Delete Node in a Linked List
         //deleteNode(nodeToDelete);
@@ -21,7 +23,10 @@ public class LinkedListEasyExampleQuestions {
         //printLinkedList(removeNthFromEndOptimal(head,2));
 
         //Reverse Linked List
-        printLinkedList(reverseList(head));
+        //printLinkedList(reverseList(head));
+
+        //Palindrome Linked List
+        System.out.println((isPalindrome(head)));
 
     }
 
@@ -89,7 +94,7 @@ public class LinkedListEasyExampleQuestions {
     public static ListNode reverseList(ListNode head) {
         ListNode previous = null;
         ListNode current = head;
-        ListNode next = current;
+        ListNode next;
         while (current != null){
             next = current.next;
             current.next = previous;
@@ -114,6 +119,38 @@ public class LinkedListEasyExampleQuestions {
         head.next = null;
 
         return reversedHead;
+    }
+
+    public static boolean isPalindrome(ListNode head) {
+        ListNode fast = head;
+        ListNode slow = head;
+        ListNode prev = null;
+
+        if(head.next == null)
+            return true;
+
+        while(fast != null && fast.next != null){
+            fast = fast.next.next;
+            slow = slow.next;
+        }
+
+        while (slow != null){
+            ListNode next = slow.next;
+            slow.next = prev;
+            prev = slow;
+            slow = next;
+        }
+
+        while (prev != null){
+            if(prev.val != head.val)
+                return false;
+            else{
+                prev = prev.next;
+                head = head.next;
+            }
+        }
+
+        return  true;
     }
 }
 
