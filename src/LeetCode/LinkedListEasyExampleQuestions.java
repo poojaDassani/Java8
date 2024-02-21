@@ -13,12 +13,107 @@ public class LinkedListEasyExampleQuestions {
         ListNode nodeToDelete = head.next.next;
 
         //Delete Node in a Linked List
-        deleteNode(nodeToDelete);
+        //deleteNode(nodeToDelete);
+        //printLinkedList(head);
+
+        //Remove Nth Node From End of List
+       // printLinkedList(removeNthFromEnd(head,2));
+        //printLinkedList(removeNthFromEndOptimal(head,2));
+
+        //Reverse Linked List
+        printLinkedList(reverseList(head));
+
+    }
+
+    public static void printLinkedList(ListNode head) {
+        ListNode current = head;
+        while (current != null) {
+            System.out.print(current.val + " -> ");
+            current = current.next;
+        }
+        System.out.println("null");
     }
 
     public static void deleteNode(ListNode node) {
         node.val = node.next.val;
         node.next = node.next.next;
+    }
+
+    public static ListNode removeNthFromEnd(ListNode head, int n) {
+        int size = 1;
+        ListNode node = head;
+        while (node.next != null){
+           size++;
+           node = node.next;
+        }
+        node = head;
+        int found = size - n;
+        if(size == n)
+            return head.next;
+        else
+            for (int i = 1; i <= found; i++) {
+                if(i == found){
+                    node.next = node.next.next;
+                }else{
+                    node = node.next;
+                }
+            }
+        return head;
+    }
+
+    // second way
+    public static ListNode removeNthFromEndOptimal(ListNode head, int n) {
+        // creating dummy with 0 for case when head needs to be removed
+        ListNode dummy = new ListNode(0);
+        dummy.next = head;
+        ListNode fast = dummy;
+        ListNode slow = dummy;
+
+        // Move fast pointer n steps ahead
+        for (int i = 0; i <= n; i++) {
+            fast = fast.next;
+        }
+
+        // Move both pointers until fast reaches the end
+        while (fast != null) {
+            fast = fast.next;
+            slow = slow.next;
+        }
+
+        // Remove the nth node from the end
+        slow.next = slow.next.next;
+
+        return dummy.next;
+    }
+
+    public static ListNode reverseList(ListNode head) {
+        ListNode previous = null;
+        ListNode current = head;
+        ListNode next = current;
+        while (current != null){
+            next = current.next;
+            current.next = previous;
+            previous = current;
+            current = next;
+        }
+        return previous;
+    }
+
+    //Recursive way to reverse list
+    public static ListNode reverseListRecursive(ListNode head) {
+        // Base case: If the list is empty or has only one node
+        if (head == null || head.next == null) {
+            return head;
+        }
+
+        // Reverse the rest of the list
+        ListNode reversedHead = reverseListRecursive(head.next);
+
+        // Reverse the current node
+        head.next.next = head;
+        head.next = null;
+
+        return reversedHead;
     }
 }
 
