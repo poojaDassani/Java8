@@ -6,11 +6,17 @@ import java.util.List;
 
 public class LinkedListEasyExampleQuestions {
     public static void main(String[] args) {
-        ListNode head = new ListNode(0);
-        head.next = new ListNode(0);
-        head.next.next = new ListNode(1);
-        head.next.next.next = new ListNode(1);
-        head.next.next.next.next = new ListNode(1);
+        ListNode head = new ListNode(1);
+        head.next = new ListNode(2);
+        head.next.next = new ListNode(4);
+//        head.next.next.next = new ListNode(14);
+//        head.next.next.next.next = new ListNode(18);
+
+        ListNode head1 = new ListNode(1);
+        head1.next = new ListNode(3);
+        head1.next.next = new ListNode(4);
+//        head1.next.next.next = new ListNode(9);
+//        head1.next.next.next.next = new ListNode(12);
 
 //        ListNode nodeToDelete = head.next.next;
 
@@ -26,7 +32,13 @@ public class LinkedListEasyExampleQuestions {
         //printLinkedList(reverseList(head));
 
         //Palindrome Linked List
-        System.out.println((isPalindrome(head)));
+        //System.out.println((isPalindrome(head)));
+
+        //Linked List Cycle
+        //System.out.println(hasCycle(head));
+
+        // Merge Two Sorted Lists
+        printLinkedList(mergeTwoLists(head,head1));
 
     }
 
@@ -151,6 +163,51 @@ public class LinkedListEasyExampleQuestions {
         }
 
         return  true;
+    }
+
+    public static boolean hasCycle(ListNode head) {
+        if(head == null)
+            return false;
+        ListNode slow = head;
+        ListNode fast = head.next;
+
+        while (fast != null && fast.next != null){
+            if(slow == fast)
+                return true;
+            fast = fast.next.next;
+            slow = slow.next;
+        }
+
+        return false;
+    }
+
+    public static ListNode mergeTwoLists(ListNode list1, ListNode list2) {
+        ListNode head = new ListNode(0);
+        ListNode node = head;
+
+        if(list1 == null && list2 != null){
+            return list2;
+        }else if (list1 != null && list2 == null){
+            return list1;
+        }
+
+        while(list1!= null && list2 != null){
+            if(list1.val < list2.val){
+                head.next = list1;
+                list1 = list1.next;
+            }else{
+                head.next = list2;
+                list2 = list2.next;
+            }
+            head = head.next;
+        }
+
+        if(list1!=null)
+            head.next = list1;
+        else if(list2 != null)
+            head.next = list2;
+
+        return node.next;
     }
 }
 
