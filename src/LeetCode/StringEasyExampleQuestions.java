@@ -66,9 +66,6 @@ public class StringEasyExampleQuestions {
             charCount.put(s.charAt(i),charCount.getOrDefault(s.charAt(i),0)+1);
         }
 
-        for (int i = 0; i < s.length(); i++) {
-
-        }
         for (Map.Entry<Character,Integer> entry : charCount.entrySet()){
             if(entry.getValue() == 1) {
                 int i = s.indexOf(entry.getKey());
@@ -167,13 +164,13 @@ public class StringEasyExampleQuestions {
             return "";
         for (int i = 0; i < count; i++) {
             char alphabet = strs[0].charAt(i);
-            for (int j = 0; j < strs.length; j++) {
-                    if(strs[j].charAt(i) == alphabet){
-                        commonPresent = true;
-                    }else{
-                        commonPresent = false;
-                        break;
-                    }
+            for (String str : strs) {
+                if (str.charAt(i) == alphabet) {
+                    commonPresent = true;
+                } else {
+                    commonPresent = false;
+                    break;
+                }
             }
             if(commonPresent)
                 common.append(alphabet);
